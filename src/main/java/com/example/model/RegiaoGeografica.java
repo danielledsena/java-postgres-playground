@@ -1,6 +1,6 @@
-package com.example;
+package com.example.model;
 
-public class Marca {
+public class RegiaoGeografica {
     private Long id;
     private String nome;
 
