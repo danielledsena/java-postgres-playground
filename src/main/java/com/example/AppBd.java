@@ -14,12 +14,38 @@ public class AppBd {
 
     public AppBd() {
         try (var conn = getConnection()) {
-            //carregarDriverJDBC();
             listarEstados(conn);
             localizarEstado(conn, "CE");
+            listarDadosTabela(conn, "produto");
         } catch(SQLException e) {
-            System.err.println("Não foi possível se conectar ao banco de dados" + e.getMessage()); 
+            System.err.println("Não foi possível se conectar ao banco de dados: " + e.getMessage()); 
         } 
+    }
+
+    private void listarDadosTabela(Connection conn, String tabela) {
+        var sql = "select * from " + tabela;
+        try {
+            var statement = conn.createStatement();
+            var result = statement.executeQuery(sql);
+
+            var metadata = result.getMetaData();
+            int cols = metadata.getColumnCount();
+
+            for (int i = 1; i <= cols; i++) {
+                System.out.printf("%-25s | ", metadata.getColumnName(i));
+            }
+            System.out.println();
+
+            while (result.next()) {
+                for (int i = 1; i <= cols; i++) {
+                    System.out.printf("%-25s | ", result.getString(i));
+                }
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro na execução da consulta: " + e.getMessage());
+        }
+
     }
 
     private void localizarEstado(Connection conn, String uf) {
@@ -53,12 +79,4 @@ public class AppBd {
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD);
     }
-
-/*     private void carregarDriverJDBC() {
-        try {
-            Class.forName("org.postgresql.Driver"); 
-        } catch (ClassNotFoundException e) {
-            System.err.println("Não foi possível carregar a biblioteca para acesso ao banco de dados" + e.getMessage());
-        }
-    } */
 }
