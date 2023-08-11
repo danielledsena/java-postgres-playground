@@ -44,4 +44,8 @@ public class Estado {
     public void setPopulacao(int populacao) {
         this.populacao = populacao;
     }
+
+    public String toString() {
+        return "Estado: " + nome + " Id: " + id + " UF: " + uf;
+    }
 }

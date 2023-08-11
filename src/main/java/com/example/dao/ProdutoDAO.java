@@ -2,13 +2,12 @@ package com.example.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+
 import com.example.model.Produto;
 
-public class ProdutoDAO {
-    private Connection conn;
-
+public class ProdutoDAO extends DAO {
     public ProdutoDAO(Connection conn) {
-        this.conn = conn;
+        super(conn);
     }
 
     public void excluir(long id) {
